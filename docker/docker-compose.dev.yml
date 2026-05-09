@@ -1,14 +1,15 @@
-version: "3.8"
-
 services:
   basic-dev:
     image: basic:dev
     build:
-      context: ..
-      dockerfile: docker/Dockerfile.dev
+      context: .
+      dockerfile: Dockerfile.dev
     volumes:
-      - ../basic_ws:/workspaces/code
-    working_dir: /workspaces/code
+      - ../basic_ws:/workspace/code:rw
+      - .ros:/root/.ros:rw
+    environment:
+      - PYTHONUNBUFFERED=1
+    working_dir: /workspace/code
     container_name: basic-dev
     command: /bin/bash
     network_mode: host

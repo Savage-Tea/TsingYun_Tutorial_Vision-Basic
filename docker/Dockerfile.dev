@@ -1,13 +1,18 @@
 FROM ros:humble-ros-base
 
-RUN apt-get update && apt-get install -y \
+# System deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
     git \
     vim \
     python3-colcon-common-extensions \
+    && rm -rf /var/lib/apt/lists/*
+
+# ROS deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-geometry-msgs \
     ros-humble-rclcpp-components \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /workspaces/code
+CMD ["/bin/bash"]

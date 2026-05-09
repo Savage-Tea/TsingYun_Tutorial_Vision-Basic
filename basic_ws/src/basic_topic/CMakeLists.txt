@@ -20,7 +20,9 @@ target_link_libraries(publisher_component
   rclcpp::rclcpp
   rclcpp_components::component)
 ament_target_dependencies(publisher_component geometry_msgs)
-rclcpp_components_register_nodes(publisher_component "basic_topic::PublisherComponent")
+rclcpp_components_register_node(publisher_component
+  PLUGIN "basic_topic::PublisherComponent"
+  EXECUTABLE publisher_node)
 
 # subscriber component
 add_library(subscriber_component SHARED src/subscriber_component.cpp)
@@ -31,7 +33,9 @@ target_link_libraries(subscriber_component
   rclcpp::rclcpp
   rclcpp_components::component)
 ament_target_dependencies(subscriber_component geometry_msgs)
-rclcpp_components_register_nodes(subscriber_component "basic_topic::SubscriberComponent")
+rclcpp_components_register_node(subscriber_component
+  PLUGIN "basic_topic::SubscriberComponent"
+  EXECUTABLE subscriber_node)
 
 # Install
 install(TARGETS publisher_component subscriber_component
