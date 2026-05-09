@@ -1,4 +1,5 @@
 #include "basic_topic/publisher_component.hpp"
+#include <random>
 
 using namespace std::chrono_literals;
 
@@ -8,7 +9,14 @@ namespace basic_topic
     PublisherComponent::PublisherComponent(const rclcpp::NodeOptions& options) :
         Node("publisher_node", options)
     {
-        // TODO
+        publishers_ = this->create_publisher<geometry_msgs::msg::Quaternion>("quaternion_data", 10);
+        timer_ = this->create_wall_timer(500ms, std::bind(&PublisherComponent::publishData, this));
+        RCLCPP_INFO(this->get_logger(), "PublisherComponent has been initialized.");
+    }
+
+    PublisherComponent::~PublisherComponent() override
+    {
+        RCLCPP_INFO(this->get_logger(), "PublisherComponent is being destroyed.");
     }
 
     double PublisherComponent::normalize_angle(double angle)
@@ -36,7 +44,21 @@ namespace basic_topic
         return q;
     }
 
-    // TODO
+    geometry_msgs::msg::Quaternion PublisherComponent::generateData()
+    {
+        double roll = normalize_angle((std::rand() / static_cast<double>(RAND_MAX)) * 2.0 * kPi - kPi);
+        double pitch = normalize_angle((std::rand() / static_cast<double>(RAND_MAX)) * 2.0 * kPi - kPi);
+        double yaw = normalize_angle((std::rand() / static_cast<double>(RAND_MAX)) * 2.0 * kPi - kPi);
+        geometry_msgs::msg::Quaternion q = rpy_to_quaternion(roll, pitch, yaw);
+        RCLCPP_INFO(this->get_logger(), "Generated Euler angles: [roll: %.3f, pitch: %.3f, yaw: %.3f]", roll, pitch, yaw);
+        return q;
+    }
+
+    void PublisherComponent::publishData()
+    {
+        auto message = generateData();
+        publishers_->publish(message);
+    }
 
 }  // namespace basic_topic
 

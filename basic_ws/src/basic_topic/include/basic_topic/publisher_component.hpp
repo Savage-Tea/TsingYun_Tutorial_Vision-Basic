@@ -17,13 +17,17 @@ namespace basic_topic
     {
     public:
         explicit PublisherComponent(const rclcpp::NodeOptions& options = rclcpp::NodeOptions());
+        ~PublisherComponent() override;
 
     private:
         static constexpr double kPi = 3.14159265358979323846;
         double normalize_angle(double angle);
         geometry_msgs::msg::Quaternion rpy_to_quaternion(double roll, double pitch, double yaw);
+        geometry_msgs::msg::Quaternion generateData();
+        void publishData();
 
-        // TODO
+        rclcpp::Publisher<geometry_msgs::msg::Quaternion>::SharedPtr publishers_;
+        rclcpp::TimerBase::SharedPtr timer_;
     };
 
 }  // namespace basic_topic

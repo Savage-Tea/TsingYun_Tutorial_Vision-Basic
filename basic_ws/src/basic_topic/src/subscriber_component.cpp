@@ -6,7 +6,15 @@ namespace basic_topic
     SubscriberComponent::SubscriberComponent(const rclcpp::NodeOptions& options) :
         Node("subscriber_node", options)
     {
-        // TODO
+        subscription_ = this->create_subscription<geometry_msgs::msg::Quaternion>(
+            "quaternion_data", 10,
+            std::bind(&SubscriberComponent::subscription_callback, this, std::placeholders::_1));
+        RCLCPP_INFO(this->get_logger(), "SubscriberComponent has been initialized.");
+    }
+
+    SubscriberComponent::~SubscriberComponent() override
+    {
+        RCLCPP_INFO(this->get_logger(), "SubscriberComponent is being destroyed.");
     }
 
     double SubscriberComponent::normalize_angle(double angle)
@@ -34,7 +42,15 @@ namespace basic_topic
         yaw = std::atan2(siny_cosp, cosy_cosp);
     }
 
-    // TODO
+    void SubscriberComponent::subscription_callback(const geometry_msgs::msg::Quaternion& msg)
+    {
+        double roll, pitch, yaw;
+        quaternion_to_rpy(msg, roll, pitch, yaw);
+        roll = normalize_angle(roll);
+        pitch = normalize_angle(pitch);
+        yaw = normalize_angle(yaw);
+        RCLCPP_INFO(this->get_logger(), "Received Euler angles: [roll: %.3f, pitch: %.3f, yaw: %.3f]", roll, pitch, yaw);
+    }
 
 }  // namespace basic_topic
 

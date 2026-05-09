@@ -16,13 +16,15 @@ namespace basic_topic
     {
     public:
         explicit SubscriberComponent(const rclcpp::NodeOptions& options = rclcpp::NodeOptions());
+        ~SubscriberComponent() override;
 
     private:
         static constexpr double kPi = 3.14159265358979323846;
         double normalize_angle(double angle);
         void quaternion_to_rpy(const geometry_msgs::msg::Quaternion& q, double& roll, double& pitch, double& yaw);
+        void subscription_callback(const geometry_msgs::msg::Quaternion& msg);
 
-        // TODO
+        rclcpp::Subscription<geometry_msgs::msg::Quaternion>::SharedPtr subscription_;
     };
 
 }  // namespace basic_topic
