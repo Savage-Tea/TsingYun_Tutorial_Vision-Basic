@@ -14,7 +14,7 @@ namespace basic_topic
         RCLCPP_INFO(this->get_logger(), "PublisherComponent has been initialized.");
     }
 
-    PublisherComponent::~PublisherComponent() override
+    PublisherComponent::~PublisherComponent()
     {
         RCLCPP_INFO(this->get_logger(), "PublisherComponent is being destroyed.");
     }

@@ -12,7 +12,7 @@ namespace basic_topic
         RCLCPP_INFO(this->get_logger(), "SubscriberComponent has been initialized.");
     }
 
-    SubscriberComponent::~SubscriberComponent() override
+    SubscriberComponent::~SubscriberComponent()
     {
         RCLCPP_INFO(this->get_logger(), "SubscriberComponent is being destroyed.");
     }
