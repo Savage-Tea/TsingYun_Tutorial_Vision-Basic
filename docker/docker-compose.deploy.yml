@@ -1,1 +1,22 @@
-# TODO
+version: "3.8"
+
+services:
+  publisher:
+    image: basic:deploy
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.deploy
+    container_name: basic-publisher
+    network_mode: host
+    restart: unless-stopped
+    command: ["ros2", "run", "basic_topic", "publisher_component"]
+
+  subscriber:
+    image: basic:deploy
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.deploy
+    container_name: basic-subscriber
+    network_mode: host
+    restart: unless-stopped
+    command: ["ros2", "run", "basic_topic", "subscriber_component"]
